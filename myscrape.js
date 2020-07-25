@@ -1,27 +1,42 @@
 const puppeteer = require('puppeteer');
 
-const targeturl = 'http://books.toscrape.com/';
-const css_myboo =
-  '#default > div > div > div > div > section > div:nth-child(2) > ol > li:nth-child(1) > article > div.image_container > a > img';
+const targetUrl = 'http://books.toscrape.com/';
+const cssBooksForPage = 'li.col-xs-6';
+
 const scrape = async () => {
-  const browser = await puppeteer.launch({ headless: false });
+  const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
-
-  await page.goto(targeturl);
+  await page.goto(targetUrl);
   await page.waitFor(3 * 1000);
-  await page.click(css_myboo);
-  await page.waitFor(3 * 1000);
+  console.log('--------');
 
-  const result = await page.evaluate(() => {
-    const title = document.querySelector('h1').innerText;
-    const price = document.querySelector('.price_color').innerText;
+  // const result = await page.$$eval(cssBooksForPage, function(elArray) {
+  //   const resultArray = [];
+  //   for (let i = 0; i < elArray.length; i += 1) {
+  //     resultArray.push(elArray[i].innerText);
+  //     // Não rola colocar console log dentro de page.(metodos)
+  //     // console.log(elArray[i].innerText);
+  //   }
+  //   return resultArray;
+  // });
 
-    return {
-      title,
-      price,
-    };
-  });
+  // const result = await page.$$eval(cssBooksForPage, elArray =>
+  //   elArray.map(function(el) {
+  //     return el.innerText;
+  //   })
+  // );
 
+  const result = await page.$$eval(cssBooksForPage, elArray =>
+    elArray.map(el => el.innerText)
+  );
+
+  // await page.click(cssMybook);
+  // await page.waitFor(2 * 1000);
+  // result = await page.evaluate(() => {
+  //   const r = document.querySelectorAll('li.col-xs-6');
+  //   return r;
+  // });
+  // console.log(`This is my result: ${JSON.stringify(result)}`);
   browser.close();
   return result;
 };

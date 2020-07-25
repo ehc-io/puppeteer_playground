@@ -1,15 +1,17 @@
 {
-    "name": "pocket2note",
-    "version": "0.9.1",
-    "description": "Export Mozilla Pocket Bookmarks to Microsoft One Note",
-    "main": "main.js",
+    "name": "myscrape",
+    "version": "0.0.1",
+    "description": "Playground for Puppeteer Exercises",
+    "main": "myscrape.js",
     "dependencies": {
         "chalk": "^4.1.0",
         "client-oauth2": "^4.3.1",
         "config": "^3.3.1",
+        "eslint-config-airbnb-base": "^14.2.0",
         "mongoose": "^5.9.22",
         "puppeteer": "^5.0.0",
-        "puppeteer-extra": "^3.1.12",
+        "puppeteer-extra": "^3.1.13",
+        "puppeteer-extra-plugin": "^3.1.7",
         "puppeteer-extra-plugin-stealth": "^2.4.13"
     },
     "peerDependencies": {},
@@ -28,11 +30,11 @@
         "prettier": "^1.19.1"
     },
     "scripts": {
-        "test": "node ./pocket2note.js"
+        "test": "node ./myscrape.js"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/ehc-io/pocket2note.git"
+        "url": "git@github.com:ehc-io/puppeteer_playground.git"
     },
     "keywords": [
         "webscraper"
@@ -40,7 +42,7 @@
     "author": "Eduardo Casseano",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/ehc-io/pocket2note/issues"
+        "url": "https://github.com/ehc-io/puppeteer_playground/issues"
     },
-    "homepage": "https://github.com/ehc-io/pocket2note#readme"
+    "homepage": "https://github.com/ehc-io/puppeteer_playground/blob/master/README.md"
 }
