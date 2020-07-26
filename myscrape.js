@@ -2,8 +2,6 @@ const puppeteer = require('puppeteer');
 
 const targetUrl = 'http://books.toscrape.com/';
 const cssBooksForPage = 'li.col-xs-6';
-const cssBookLink =
-  '#default > div > div > div > div > section > div:nth-child(2) > ol > li:nth-child(1) > article > div.image_container > a';
 
 const scrape = async () => {
   console.log('Running...');
@@ -11,7 +9,7 @@ const scrape = async () => {
   const browser = await puppeteer.launch({
     headless: true,
     ignoreHTTPSErrors: true,
-    // devtools: true,
+    devtools: true,
     // userDataDir: './chromium-profile',
     args: [
       "--proxy-server='direct://",
@@ -23,31 +21,27 @@ const scrape = async () => {
   });
   const page = await browser.newPage();
   await page.goto(targetUrl);
-  await page.waitFor(2 * 1000);
-
-  const result = await page.$$eval(cssBooksForPage, elArray =>
-    elArray.map(el => el.innerText)
-  );
-
-  // const bookHandle = await page.evaluateHandle(function(sel) {
-  //   return document.querySelector(sel);
-  // }, cssBookLink);
-
-  const bookHandle = await page.evaluateHandle(
-    sel => document.querySelector(sel),
-    cssBookLink
-  );
-
-  // await page.evaluateHandle(function(link) {
-  //   link.click();
-  // }, bookHandle);
-
-  await page.evaluateHandle(link => link.click(), bookHandle);
-
   await page.waitFor(1 * 1000);
+
+  const booksForPage = await page.evaluate(function(sel) {
+    const elArray = [];
+    const items = document.querySelectorAll(sel);
+    for (let i = 0; i < items.length; i += 1) {
+      elArray.push({
+        url: items[i].children[0].children[0].children[0].href,
+        title: items[i].children[0].children[2].innerText,
+      });
+    }
+    return elArray;
+  }, cssBooksForPage);
+  //
+  booksForPage.forEach(function(book) {
+    console.log(`${book.title}`);
+  });
+  console.log(`There are ${booksForPage.length} elements in this page`);
+  await page.waitFor(100 * 1000);
   await page.screenshot({ path: 'screenshots/book.png' });
   browser.close();
-  return result;
 };
 
 scrape().then(value => {
