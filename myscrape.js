@@ -26,12 +26,18 @@ const scrape = async () => {
   const booksForPage = await page.evaluate(function(sel) {
     const elArray = [];
     const items = document.querySelectorAll(sel);
-    for (let i = 0; i < items.length; i += 1) {
+    items.forEach(function(book) {
       elArray.push({
-        url: items[i].children[0].children[0].children[0].href,
-        title: items[i].children[0].children[2].innerText,
+        url: book.children[0].children[0].children[0].href,
+        title: book.children[0].children[2].innerText,
       });
-    }
+    });
+    // for (let i = 0; i < items.length; i += 1) {
+    //   elArray.push({
+    //     url: items[i].children[0].children[0].children[0].href,
+    //     title: items[i].children[0].children[2].innerText,
+    //   });
+    // }
     return elArray;
   }, cssBooksForPage);
   //
